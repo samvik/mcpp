@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.0.0)
 project(mcpp) 
 
+option(BUILD_EXAMPLES "Build examples" OFF)
+
 set(MCPP_VERSION 0.1.0)
 set(MCPP_ABI_VERSION 0)
 
@@ -62,3 +64,7 @@ install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/mcpp/
 install(FILES "${CMAKE_BINARY_DIR}/mcpp.pc"
 				DESTINATION lib/pkgconfig
 				COMPONENT development)
+
+if(BUILD_EXAMPLES)
+	add_subdirectory(examples)
+endif()
