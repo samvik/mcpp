@@ -4,13 +4,20 @@
 
 namespace mcpp {
 
-Connection::Connection(std::string senderId, std::string pullAddress,
-											 std::string pubAddress) :
-	m_senderId(senderId), m_context(1), m_pull(m_context, ZMQ_PULL), m_pub(m_context, ZMQ_PUB)
+Connection::Connection(std::string pullAddress, std::string pubAddress) :
+	m_context(1), m_pull(m_context, ZMQ_PULL), m_pub(m_context, ZMQ_PUB)
 {
 	m_pull.connect(pullAddress.c_str());
 	m_pub.connect(pubAddress.c_str());
-	m_pub.setsockopt(ZMQ_IDENTITY, m_senderId.data(), m_senderId.length());
+}
+
+Connection::Connection(std::string uuid, std::string pullAddress,
+											 std::string pubAddress) :
+	m_context(1), m_pull(m_context, ZMQ_PULL), m_pub(m_context, ZMQ_PUB)
+{
+	m_pull.connect(pullAddress.c_str());
+	m_pub.connect(pubAddress.c_str());
+	m_pub.setsockopt(ZMQ_IDENTITY, uuid.data(), uuid.length());
 }
 
 Connection::~Connection()
@@ -51,7 +58,7 @@ bool Connection::send(const std::string &data)
 	return m_pub.send(msg);
 }
 
-bool Connection::deliver(const std::string uuid,
+bool Connection::deliver(const std::string &uuid,
 												 const std::vector<unsigned> &ids,
 												 const std::string &data)
 {

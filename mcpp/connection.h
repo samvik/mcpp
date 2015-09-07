@@ -23,11 +23,22 @@ class Connection
 public:
 		/**
 		 * @brief Open a connection
-		 * @param senderId Sender id of this instance.
 		 * @param pullAddress Mongrel2 pull connection string.
 		 * @param pubAddress Mongrel2 publish connection string.
 		 */
-    Connection(std::string senderId, std::string pullAddress,
+		Connection(std::string pullAddress, std::string pubAddress);
+
+		/**
+		 * @brief Open a connection
+		 *
+		 * The instance uuid is used by zeromq see ZMQ_IDENTITY
+		 * (http://api.zeromq.org/2-1:zmq-setsockopt#toc6)
+		 *
+		 * @param uuid Instance uuid of this connection.
+		 * @param pullAddress Mongrel2 pull connection string.
+		 * @param pubAddress Mongrel2 publish connection string.
+		 */
+		Connection(std::string uuid, std::string pullAddress,
                std::string pubAddress);
 
 		virtual ~Connection();
@@ -59,12 +70,12 @@ public:
 	public:
 		/**
 		 * @brief Deliver data to given ids.
-		 * @param uuid Sender uuid.
+		 * @param uuid Mongrel instance uuid.
 		 * @param ids Vector of recipient ids.
 		 * @param data Data to deliver.
 		 * @return True if the data was successfully delivered to mongrel, false otherwise.
 		 */
-    bool deliver(const std::string uuid, const std::vector<unsigned> &ids,
+		bool deliver(const std::string &uuid, const std::vector<unsigned> &ids,
                  const std::string &data );
 
 		/**
@@ -176,7 +187,7 @@ public:
 		 *
 		 * Can be executed at any time, provided that the client ids are known.
 		 *
-		 * @param uuid Sender uuid.
+		 * @param uuid Mongrel instance uuid.
 		 * @param ids Vector of recipient ids.
 		 * @param data Data to deliver.
 		 * @param opcode Websocker operation code. See mcpp::websocket::OpCode.
@@ -193,7 +204,7 @@ public:
 		 *
 		 * Can be executed at any time, provided that the client ids are known.
 		 *
-		 * @param uuid Sender uuid.
+		 * @param uuid Mongrel instance uuid.
 		 * @param ids Vector of recipient ids.
 		 * @param json Json to deliver.
 		 * @param opcode Websocker operation code. See mcpp::websocket::OpCode.
@@ -217,7 +228,7 @@ public:
 
 		/**
 		 * @brief Close websocket connections.
-		 * @param uuid Sender uuid.
+		 * @param uuid Mongrel instance uuid.
 		 * @param ids Connection ids to close.
 		 * @param code Websocket status code.
 		 * @param reason Descriptive reason to why the connection was closed.
@@ -234,7 +245,6 @@ public:
     static const unsigned MAX_IDS = 128;
 
 private:
-		std::string m_senderId;
     zmq::context_t m_context;
     zmq::socket_t m_pull;
     zmq::socket_t m_pub;

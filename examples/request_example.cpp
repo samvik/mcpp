@@ -5,8 +5,7 @@
 
 int main(int, char **) {
 
-	mcpp::Connection connection("12345", 
-															"tcp://127.0.0.1:9999", 
+	mcpp::Connection connection("tcp://127.0.0.1:9999",
 															"tcp://127.0.0.1:9998");
 	
 	int count = 0;
