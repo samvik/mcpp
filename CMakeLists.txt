@@ -20,6 +20,8 @@ set_target_properties(mcpp_static PROPERTIES
 	OUTPUT_NAME mcpp
 )
 
+include_directories(./)
+
 find_package(PkgConfig)
 
 pkg_check_modules(ZMQ libzmq REQUIRED)

@@ -1,4 +1,4 @@
-#include "connection.h"
+#include <mcpp/connection.h>
 
 #include <sstream>
 

@@ -2,7 +2,7 @@
 #define MCPP_UTILITY_H
 
 #include <string>
-#include "query.h"
+#include <mcpp/query.h>
 
 namespace mcpp {
 namespace utility {

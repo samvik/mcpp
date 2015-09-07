@@ -1,4 +1,4 @@
-#include "websocket.h"
+#include <mcpp/websocket.h>
 
 namespace mcpp {
 namespace websocket {

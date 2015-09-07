@@ -1,4 +1,4 @@
-#include "dispatcher.h"
+#include <mcpp/dispatcher.h>
 
 #include <list>
 #include <regex>

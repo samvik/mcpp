@@ -4,7 +4,7 @@
 #include <string>
 #include <functional>
 
-#include "request.h"
+#include <mcpp/request.h>
 
 namespace mcpp {
 

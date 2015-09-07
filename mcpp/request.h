@@ -3,7 +3,8 @@
 
 #include <map>
 #include <json/json.h>
-#include "query.h"
+
+#include <mcpp/query.h>
 
 namespace zmq {
 	class message_t;

@@ -6,9 +6,9 @@
 
 #include <json/json.h>
 
-#include "request.h"
-#include "http.h"
-#include "websocket.h"
+#include <mcpp/request.h>
+#include <mcpp/http.h>
+#include <mcpp/websocket.h>
 
 namespace mcpp {
 

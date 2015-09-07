@@ -1,11 +1,10 @@
-#include "request.h"
+#include <mcpp/request.h>
+#include <mcpp/utility.h>
 
 #include <zmq.hpp>
 #include <json/json.h>
 
 #include <sstream>
-
-#include "utility.h"
 
 namespace mcpp {
 

@@ -1,4 +1,4 @@
-#include "http.h"
+#include <mcpp/http.h>
 
 namespace mcpp {
 namespace http {
