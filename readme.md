@@ -1,4 +1,4 @@
-# MCPP - A c++ Mongrel2 client library.
+# MCPP - A C++ Mongrel2 client library.
 
 ## Dependencies
 * libjsoncpp - https://github.com/open-source-parsers/jsoncpp
