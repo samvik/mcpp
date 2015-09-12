@@ -13,7 +13,7 @@ Request::Request() : m_valid(false)
 
 }
 
-Request::Request(const zmq::message_t& message) : m_valid(false)
+Request::Request(const zmq::message_t& message) : m_valid(true)
 {
 	std::string in(static_cast<const char*>(message.data()), message.size());
 	std::istringstream stream(in);
