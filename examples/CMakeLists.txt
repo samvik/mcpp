@@ -8,3 +8,6 @@ target_link_libraries(mcpp-request-example mcpp)
 add_executable(mcpp-dispatcher-example dispatcher_example.cpp)
 target_link_libraries(mcpp-dispatcher-example mcpp)
 
+add_executable(mcpp-websocket-example websocket_example.cpp)
+target_link_libraries(mcpp-websocket-example mcpp)
+
