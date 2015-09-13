@@ -10,7 +10,7 @@
 git clone https://github.com/samvik/mcpp.githttps://github.com/samvik/mcpp.git
 mkdir mcpp_build
 cd mcpp_build
-cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_EXAMPLE=On ../mcpp
+cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_EXAMPLES=On ../mcpp
 make
 make install
 ```
