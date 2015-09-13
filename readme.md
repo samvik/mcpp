@@ -14,6 +14,9 @@ cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_EXAMPLES=On ../mcpp
 make
 make install
 ```
+## Examples
+
+See [examples](https://github.com/samvik/mcpp/tree/master/examples).
 
 ## License
 New BSD (3-clause)
