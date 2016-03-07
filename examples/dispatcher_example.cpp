@@ -41,9 +41,11 @@ int main(int, char **) {
 		// Wait for a request.
 		mcpp::Request req = connection.recv();
 
-		// Dispatch the request.
-		if(!dispatcher.dispatch(req)) {
-			connection.replyHttp(req, mcpp::http::StatusCode::NOT_FOUND);
+		if(!req.isDisconnect()) {
+			// Dispatch the request.
+			if(!dispatcher.dispatch(req)) {
+				connection.replyHttp(req, mcpp::http::StatusCode::NOT_FOUND);
+			}
 		}
 	}
 	

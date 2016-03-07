@@ -15,6 +15,11 @@ int main(int, char **) {
 		// Wait for a request
 		mcpp::Request req = connection.recv();
 		
+		if(req.isDisconnect()) {
+			std::cout << "Client disconnected." << std::endl;
+			continue;
+		}
+
 		std::cout << "Got a " << req.method() << " request for " << req.path() << std::endl;
 
 		// Prepare and send response.

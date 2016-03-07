@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.0.0)
 project(mcpp) 
 
-option(BUILD_EXAMPLES "Build examples" OFF)
+option(MCPP_BUILD_EXAMPLES "Build examples" OFF)
 
 set(MCPP_VERSION 0.1.0)
 set(MCPP_ABI_VERSION 0)
@@ -12,15 +12,15 @@ file(GLOB SRC_LIST mcpp/*.cpp mcpp/*.h)
 
 add_library(mcpp SHARED ${SRC_LIST})
 set_target_properties (mcpp PROPERTIES
-	OUTPUT_NAME mcpp
-	VERSION ${MCPP_VERSION}
-	SOVERSION ${MCPP_ABI_VERSION}
-)
+    OUTPUT_NAME mcpp
+    VERSION ${MCPP_VERSION}
+    SOVERSION ${MCPP_ABI_VERSION}
+    )
 
 add_library(mcpp_static STATIC ${SRC_LIST})
 set_target_properties(mcpp_static PROPERTIES
-	OUTPUT_NAME mcpp
-)
+    OUTPUT_NAME mcpp
+    )
 
 include_directories(./)
 
@@ -43,28 +43,28 @@ set(PKG_CONFIG_INCLUDEDIR "\${prefix}/include")
 set(PKG_CONFIG_LIBS "-L\${libdir} -lmcpp")
 set(PKG_CONFIG_CFLAGS "-I\${includedir} -std=c++11")
 configure_file(
-	"${CMAKE_CURRENT_SOURCE_DIR}/cmake/mcpp.pc.cmake"
-	"${CMAKE_CURRENT_BINARY_DIR}/mcpp.pc"
-)
+    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/mcpp.pc.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/mcpp.pc"
+    )
 
 # Install
 install(TARGETS mcpp LIBRARY
-				DESTINATION lib
-				COMPONENT runtime)
+    DESTINATION lib
+    COMPONENT runtime)
 
 install(TARGETS mcpp_static ARCHIVE
-				DESTINATION lib
-				COMPONENT runtime)
+    DESTINATION lib
+    COMPONENT runtime)
 
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/mcpp/
-				DESTINATION "include/mcpp"
-				COMPONENT development
-				FILES_MATCHING PATTERN "*.h")
+    DESTINATION "include/mcpp"
+    COMPONENT development
+    FILES_MATCHING PATTERN "*.h")
 
 install(FILES "${CMAKE_BINARY_DIR}/mcpp.pc"
-				DESTINATION lib/pkgconfig
-				COMPONENT development)
+    DESTINATION lib/pkgconfig
+    COMPONENT development)
 
-if(BUILD_EXAMPLES)
-	add_subdirectory(examples)
+if(MCPP_BUILD_EXAMPLES)
+    add_subdirectory(examples)
 endif()

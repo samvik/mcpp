@@ -17,7 +17,7 @@ bool decodeUrl(const std::string &in, std::string &out)
 		if (in[i] == '%') {
 			if (i + 3 <= in.size()) {
 				std::istringstream stream(in.substr(i + 1, 2));
-				int value;				
+				int value;
 				if (stream >> std::hex >> value) {
 					out += static_cast<char>(value);
 					i += 2;
@@ -72,11 +72,11 @@ void parseQuery(const std::string &query, Query &parameters)
 
 		std::string key, value;
 		if(pos != std::string::npos) {
-		 key = token.substr(0, pos);
-		 value = token.substr(pos+1);
+			key = token.substr(0, pos);
+			value = token.substr(pos+1);
 		}
 		else {
-		 key = token;
+			key = token;
 		}
 
 		parameters[key] = value;

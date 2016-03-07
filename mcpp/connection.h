@@ -20,7 +20,7 @@ namespace mcpp {
  */
 class Connection
 {
-public:
+	public:
 		/**
 		 * @brief Open a connection
 		 * @param pullAddress Mongrel2 pull connection string.
@@ -39,7 +39,7 @@ public:
 		 * @param pubAddress Mongrel2 publish connection string.
 		 */
 		Connection(std::string uuid, std::string pullAddress,
-               std::string pubAddress);
+							 std::string pubAddress);
 
 		virtual ~Connection();
 
@@ -65,7 +65,7 @@ public:
 		 * @param data Data to send.
 		 * @return True if the data was successfully sent to mongrel, false otherwise.
 		 */
-    bool send(const std::string &data);
+		bool send(const std::string &data);
 
 	public:
 		/**
@@ -76,7 +76,7 @@ public:
 		 * @return True if the data was successfully delivered to mongrel, false otherwise.
 		 */
 		bool deliver(const std::string &uuid, const std::vector<unsigned> &ids,
-                 const std::string &data );
+								 const std::string &data );
 
 		/**
 		 * @brief Reply to a request.
@@ -95,8 +95,8 @@ public:
 		 * @param headers Http headers.
 		 * @return True if successfull, false otherwise.
 		 */
-    bool replyHttp(const Request &request, const std::string &content,
-                   uint16_t code, const std::string &status,
+		bool replyHttp(const Request &request, const std::string &content,
+									 uint16_t code, const std::string &status,
 									 const Json::Value &headers = Json::Value());
 
 		/**
@@ -111,8 +111,8 @@ public:
 		 * @param headers Http headers.
 		 * @return True if successfull, false otherwise.
 		 */
-    bool replyHttp(const Request &request, const std::string &content,
-                   http::StatusCode code = http::StatusCode::OK,
+		bool replyHttp(const Request &request, const std::string &content,
+									 http::StatusCode code = http::StatusCode::OK,
 									 const Json::Value &headers = Json::Value());
 
 		/**
@@ -131,6 +131,10 @@ public:
 
 		/**
 		 * @brief Reply to a request with a json http message.
+		 *
+		 * If the Content-Type header is not set explicitly by the caller it will
+		 * be set to "text/x-json; charset=utf-8" by this method.
+		 *
 		 * @param request Request to reply to.
 		 * @param json Json content.
 		 * @param code Http status code.
@@ -138,7 +142,7 @@ public:
 		 * @return True if successfull, false otherwise.
 		 */
 		bool replyHttpJson(const Request &request, const Json::Value &json,
-                       http::StatusCode code = http::StatusCode::OK,
+											 http::StatusCode code = http::StatusCode::OK,
 											 const Json::Value &headers = Json::Value());
 
 
@@ -152,7 +156,7 @@ public:
 		 * @param headers Additional http headers.
 		 * @return True if successfull, false otherwise.
 		 */
-    bool acceptWebsocket(const Request &request,
+		bool acceptWebsocket(const Request &request,
 												 Json::Value headers = Json::Value());
 
 		/**
@@ -165,7 +169,7 @@ public:
 		 * @param headers Additional http headers.
 		 * @return True if successfull, false otherwise.
 		 */
-    bool rejectWebsocket(const Request &request,
+		bool rejectWebsocket(const Request &request,
 												 Json::Value headers = Json::Value());
 
 		/**
@@ -179,8 +183,8 @@ public:
 		 * @param rsvd Websocket extension, should be 0 if not used.
 		 * @return True if successfull, false otherwise.
 		 */
-    bool replyWebsocket(const Request &request, const std::string &data,
-                        websocket::OpCode opcode, char rsvd = 0x00);
+		bool replyWebsocket(const Request &request, const std::string &data,
+												websocket::OpCode opcode, char rsvd = 0x00);
 
 		/**
 		 * @brief Deliver data to websocket clients.
@@ -194,10 +198,10 @@ public:
 		 * @param rsvd Websocket extension, should be 0 if not used.
 		 * @return True if successfull, false otherwise.
 		 */
-    bool deliverWebsocket(const std::string &uuid,
-                          const std::vector<unsigned> ids,
-                          const std::string &data,
-                          websocket::OpCode opcode, char rsvd = 0x00);
+		bool deliverWebsocket(const std::string &uuid,
+													const std::vector<unsigned> ids,
+													const std::string &data,
+													websocket::OpCode opcode, char rsvd = 0x00);
 
 		/**
 		 * @brief  Deliver json to websocket clients.
@@ -211,10 +215,10 @@ public:
 		 * @param rsvd Websocket extension, should be 0 if not used.
 		 * @return True if successfull, false otherwise.
 		 */
-    bool deliverWebsocketJson(const std::string &uuid,
-                              const std::vector<unsigned> ids,
+		bool deliverWebsocketJson(const std::string &uuid,
+															const std::vector<unsigned> ids,
 															const Json::Value &json,
-                              websocket::OpCode opcode, char rsvd = 0x00);
+															websocket::OpCode opcode, char rsvd = 0x00);
 
 		/**
 		 * @brief Close a websocket connection.
@@ -223,8 +227,8 @@ public:
 		 * @param reason Descriptive reason to why the connection was closed.
 		 * @return True if successfull, false otherwise.
 		 */
-    bool closeWebsocket(const Request &request, websocket::StatusCode code,
-                        std::string reason);
+		bool closeWebsocket(const Request &request, websocket::StatusCode code,
+												std::string reason);
 
 		/**
 		 * @brief Close websocket connections.
@@ -242,12 +246,12 @@ public:
 		/**
 		 * @brief Max number of ids to deliver to with one call.
 		 */
-    static const unsigned MAX_IDS = 128;
+		static const unsigned MAX_IDS = 128;
 
-private:
-    zmq::context_t m_context;
-    zmq::socket_t m_pull;
-    zmq::socket_t m_pub;
+	private:
+		zmq::context_t m_context;
+		zmq::socket_t m_pull;
+		zmq::socket_t m_pub;
 };
 
 } // namespace mcpp

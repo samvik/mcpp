@@ -13,11 +13,10 @@ Request::Request() : m_valid(false)
 
 }
 
-Request::Request(const zmq::message_t& message) : m_valid(true)
+Request::Request(const zmq::message_t& message) : m_valid(false)
 {
 	std::string in(static_cast<const char*>(message.data()), message.size());
 	std::istringstream stream(in);
-
 
 	std::string path;
 	std::string headers;
@@ -36,10 +35,17 @@ Request::Request(const zmq::message_t& message) : m_valid(true)
 
 	// Parse http header
 	Json::Reader reader;
-	bool parsingSuccessful = reader.parse(headers, m_headers);
-	if ( !parsingSuccessful )
+	if ( !reader.parse(headers, m_headers) )
 	{
 		// TODO: Throw exception
+	}
+
+	// Parse json body
+	if(m_headers.isMember("METHOD") && m_headers["METHOD"] == "JSON") {
+		if ( !reader.parse(m_body, m_jsonBody) )
+		{
+			// TODO: Throw exception
+		}
 	}
 
 	// Parse query parameters
@@ -66,6 +72,18 @@ bool Request::isValid() const
 {
 	return m_valid;
 }
+
+bool Request::isDisconnect() const
+{
+	bool result = false;
+
+	if(m_jsonBody.isMember("type") && m_jsonBody["type"] == "disconnect") {
+		result = true;
+	}
+
+	return result;
+}
+
 const std::string &Request::sender() const
 {
 	return m_sender;

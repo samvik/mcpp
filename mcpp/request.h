@@ -7,7 +7,7 @@
 #include <mcpp/query.h>
 
 namespace zmq {
-	class message_t;
+class message_t;
 }
 
 namespace mcpp {
@@ -36,6 +36,16 @@ class Request
 		 * @return True if valid, false otherwise.
 		 */
 		bool isValid() const;
+
+		/**
+		 * @brief Return true if this is a disconnect message.
+		 *
+		 * A disconnect message is sent by mongrel when a client closes
+		 * it's connection.
+		 *
+		 * @return True if this is a disconnect message, false otherwise.
+		 */
+		bool isDisconnect() const;
 
 		/**
 		 * @brief Get sender uuid.
@@ -111,6 +121,7 @@ class Request
 		std::string m_sender;
 		unsigned m_connectionId;
 		Json::Value m_headers;
+		Json::Value m_jsonBody;
 		std::string m_body;
 
 		std::string m_path;

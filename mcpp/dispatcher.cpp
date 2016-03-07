@@ -84,7 +84,7 @@ struct Route {
 };
 
 struct Dispatcher::Impl {
-	std::list<Route> m_routes;
+		std::list<Route> m_routes;
 };
 
 Dispatcher::Dispatcher() : m_impl(new Impl())
@@ -134,11 +134,14 @@ bool Dispatcher::dispatch(const Request &request)
 {
 	bool result = false;
 
+	// Calculate dispatch path.
+	std::string path = request.path().substr(request.basePath().length());
+
 	for(Route &route : m_impl->m_routes) {
 		std::regex regex (route.regex);
 
 		std::smatch match;
-		if (std::regex_match (request.path(), match, regex)) {
+		if (std::regex_match (path, match, regex)) {
 			(*(route.handle))(request, match);
 			result = true;
 			break;

@@ -37,7 +37,7 @@ bool Connection::recv(Request &request, long timeout)
 	zmq::message_t msg;
 
 	zmq::pollitem_t items [] = {
-		{ m_pull, 0, ZMQ_POLLIN, 0 }
+		{ (void*)m_pull, 0, ZMQ_POLLIN, 0 }
 	};
 
 	zmq::poll(&items[0], 1, timeout);
@@ -123,9 +123,14 @@ bool Connection::replyHttp(const Request &request, http::StatusCode code, const 
 bool Connection::replyHttpJson(const Request &request, const Json::Value &json,
 															 http::StatusCode code, const Json::Value &headers)
 {
+	auto modifiedHeaders = headers;
+	if(!modifiedHeaders.isMember("Content-Type")) {
+		modifiedHeaders["Content-Type"] = std::string("text/x-json; charset=utf-8");
+	}
+
 	Json::StyledWriter writer;
 	std::string content = writer.write( json );
-	return replyHttp(request, content, code, headers);
+	return replyHttp(request, content, code, modifiedHeaders);
 }
 
 bool Connection::acceptWebsocket(const Request &request, Json::Value headers)
