@@ -5,6 +5,7 @@
 #include <json/json.h>
 
 #include <mcpp/query.h>
+#include <mcpp/http.h>
 
 namespace zmq {
 class message_t;
@@ -94,7 +95,7 @@ class Request
 		 *
 		 * @return Base path.
 		 */
-		const std::string basePath() const;
+		std::string basePath() const;
 
 		/**
 		 * @brief Get method.
@@ -102,9 +103,18 @@ class Request
 		 * This is a convenience function. The same data can be retreivedfrom the
 		 * headers.
 		 *
-		 * @return Request method.
+		 * @return Http request method.
 		 */
-		const std::string method() const;
+		std::string methodString() const;
+
+		/**
+		 * @brief Returns the method as an enum.
+		 *
+		 * This is a convenience function.
+		 *
+		 * @return Http request method.
+		 */
+		http::Method method() const;
 
 		/**
 		 * @brief Get query parameters.

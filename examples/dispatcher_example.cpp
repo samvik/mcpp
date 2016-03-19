@@ -8,7 +8,7 @@
 using namespace std::placeholders;
 
 void handler1(mcpp::Connection &connection, const mcpp::Request &req) {
-	std::cout << "Got a " << req.method() << " request for " << req.path() << std::endl;
+	std::cout << "Got a " << req.methodString() << " request for " << req.path() << std::endl;
 
 	std::ostringstream stream;
 	stream << "Hello cruel world!";
@@ -16,7 +16,7 @@ void handler1(mcpp::Connection &connection, const mcpp::Request &req) {
 }
 
 void handler2(mcpp::Connection &connection, const mcpp::Request &req, std::string id) {
-	std::cout << "Got a " << req.method() << " request for " << req.path() << " with id " << id << std::endl;
+	std::cout << "Got a " << req.methodString() << " request for " << req.path() << " with id " << id << std::endl;
 
 	std::ostringstream stream;
 	stream << "The id is: " << id;
@@ -39,7 +39,7 @@ int main(int, char **) {
 	std::cout << "Waiting for requests..." << std::endl;
 	for(;;) {
 		// Wait for a request.
-		mcpp::Request req = connection.recv();
+		mcpp::Request req = connection.receive();
 
 		if(!req.isDisconnect()) {
 			// Dispatch the request.

@@ -24,14 +24,14 @@ Connection::~Connection()
 {
 }
 
-Request Connection::recv()
+Request Connection::receive()
 {
 	Request request;
-	recv(request, -1);
+	receive(request, -1);
 	return request;
 }
 
-bool Connection::recv(Request &request, long timeout)
+bool Connection::receive(Request &request, long timeout)
 {
 	bool result = false;
 	zmq::message_t msg;
@@ -120,7 +120,7 @@ bool Connection::replyHttp(const Request &request, http::StatusCode code, const 
 									 http::statusCodeMessage(code), headers);
 }
 
-bool Connection::replyHttpJson(const Request &request, const Json::Value &json,
+bool Connection::replyHttpJson(const Request &request, const std::string &json,
 															 http::StatusCode code, const Json::Value &headers)
 {
 	auto modifiedHeaders = headers;
@@ -128,9 +128,15 @@ bool Connection::replyHttpJson(const Request &request, const Json::Value &json,
 		modifiedHeaders["Content-Type"] = std::string("text/x-json; charset=utf-8");
 	}
 
+	return replyHttp(request, json, code, modifiedHeaders);
+}
+
+bool Connection::replyHttpJson(const Request &request, const Json::Value &json,
+															 http::StatusCode code, const Json::Value &headers)
+{
 	Json::StyledWriter writer;
 	std::string content = writer.write( json );
-	return replyHttp(request, content, code, modifiedHeaders);
+	return replyHttpJson(request, content, code, headers);
 }
 
 bool Connection::acceptWebsocket(const Request &request, Json::Value headers)

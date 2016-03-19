@@ -109,14 +109,19 @@ const std::string &Request::body() const
 	return m_body;
 }
 
-const std::string Request::basePath() const
+std::string Request::basePath() const
 {
 	return m_headers.get("PATTERN", std::string()).asString();
 }
 
-const std::string Request::method() const
+std::string Request::methodString() const
 {
 	return m_headers.get("METHOD", std::string()).asString();
+}
+
+http::Method Request::method() const
+{
+	return http::getMethod(methodString());
 }
 
 const Query& Request::query() const

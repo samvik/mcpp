@@ -55,6 +55,41 @@ std::string statusCodeMessage(mcpp::http::StatusCode code)
 	return msg;
 }
 
+Method getMethod(std::string method)
+{
+	http::Method result = http::Method::CUSTOM;
+
+	if(method == "GET") {
+		result = http::Method::GET;
+	}
+	else if(method == "HEAD") {
+		result = http::Method::HEAD;
+	}
+	else if(method == "POST") {
+		result = http::Method::POST;
+	}
+	else if(method == "PUT") {
+		result = http::Method::PUT;
+	}
+	else if(method == "DELETE") {
+		result = http::Method::DELETE;
+	}
+	else if(method == "TRACE") {
+		result = http::Method::TRACE;
+	}
+	else if(method == "OPTIONS") {
+		result = http::Method::OPTIONS;
+	}
+	else if(method == "CONNECT") {
+		result = http::Method::CONNECT;
+	}
+	else if(method == "PATCH") {
+		result = http::Method::PATCH;
+	}
+
+	return result;
+}
+
 }
 } // namespace mcpp
 

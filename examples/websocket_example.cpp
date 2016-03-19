@@ -10,19 +10,19 @@ int main(int, char **) {
 	std::cout << "Waiting for requests..." << std::endl;
 	for(;;) {
 		// Wait for a request
-		mcpp::Request req = connection.recv();
+		mcpp::Request req = connection.receive();
 		if(req.isDisconnect()) {
 			std::cout << "Client disconnected." << std::endl;
 			continue;
 		}
 
-		const std::string &method = req.method();
+		const std::string &method = req.methodString();
 		std::cout << "Got a " << method << " request for " << req.path() << std::endl;
 
-		if(method == "WEBSOCKET_HANDSHAKE") {
+		if(req.methodString() == "WEBSOCKET_HANDSHAKE") {
 			connection.acceptWebsocket(req);
 		}
-		else if(method == "WEBSOCKET") {
+		else if(req.methodString() == "WEBSOCKET") {
 			mcpp::websocket::Flags flags =
 					mcpp::websocket::decodeFlags(req.headers().get("FLAGS", "").asString());
 

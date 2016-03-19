@@ -8,6 +8,22 @@ namespace mcpp {
 namespace http {
 
 /**
+ * @brief Standard http methods.
+ */
+enum class Method {
+	GET,
+	HEAD,
+	POST,
+	PUT,
+	DELETE,
+	TRACE,
+	OPTIONS,
+	CONNECT,
+	PATCH,
+	CUSTOM
+};
+
+/**
  * @brief Http status codes.
  */
 enum class StatusCode : uint16_t {
@@ -63,6 +79,13 @@ enum class StatusCode : uint16_t {
  * @return Http message.
  */
 std::string statusCodeMessage(StatusCode code);
+
+/**
+ * @brief Get the method as an enum.
+ * @param method Method as string.
+ * @return Method as enum.
+ */
+Method getMethod(std::string method);
 
 }
 } // namespace mcpp
