@@ -98,7 +98,7 @@ bool Connection::replyHttp(const Request &request, const std::string &content,
 	r << "HTTP/1.1 " << code << " " << status << "\r\n";
 	r << "Content-Length: " << content.length() << "\r\n";
 
-	 for( Json::ValueIterator it = headers.begin() ; it != headers.end() ; it++ ) {
+	for( Json::ValueConstIterator it = headers.begin() ; it != headers.end() ; it++ ) {
 		r << it.key().asString() << ": " << it->asString() << "\r\n";
 	}
 
