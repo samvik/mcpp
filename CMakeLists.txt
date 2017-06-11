@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.0)
-project(mcpp) 
+project(mcpp)
 
 option(MCPP_BUILD_EXAMPLES "Build examples" OFF)
 
@@ -22,7 +22,8 @@ set_target_properties(mcpp_static PROPERTIES
     OUTPUT_NAME mcpp
     )
 
-include_directories(./)
+target_include_directories(mcpp PUBLIC ./)
+target_include_directories(mcpp_static PUBLIC ./)
 
 find_package(PkgConfig)
 
