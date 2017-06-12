@@ -1,10 +1,8 @@
 #include <mcpp/request.h>
 #include <mcpp/utility.h>
 
-#include <zmq.hpp>
-#include <json/json.h>
-
 #include <sstream>
+#include <zmq.hpp>
 
 namespace mcpp {
 
@@ -34,22 +32,15 @@ Request::Request(const zmq::message_t& message) : m_valid(false)
 	}
 
 	// Parse http header
-	Json::Reader reader;
-	if ( !reader.parse(headers, m_headers) )
-	{
-		// TODO: Throw exception
-	}
+    m_headers = json::parse(headers);
 
 	// Parse json body
-	if(m_headers.isMember("METHOD") && m_headers["METHOD"] == "JSON") {
-		if ( !reader.parse(m_body, m_jsonBody) )
-		{
-			// TODO: Throw exception
-		}
+    if(m_headers.count("METHOD") && m_headers["METHOD"] == "JSON") {
+        m_jsonBody = json::parse(m_body);
 	}
 
 	// Parse query parameters
-	std::string query = m_headers.get("QUERY", std::string()).asString();
+    std::string query = m_headers.value("QUERY", std::string());
 	if(!query.empty()) {
 		std::string decodedQuery;
 		if(utility::decodeUrl(query, decodedQuery)) {
@@ -77,7 +68,7 @@ bool Request::isDisconnect() const
 {
 	bool result = false;
 
-	if(m_jsonBody.isMember("type") && m_jsonBody["type"] == "disconnect") {
+    if(m_jsonBody.count("type") && m_jsonBody["type"] == "disconnect") {
 		result = true;
 	}
 
@@ -99,7 +90,7 @@ const std::string &Request::path() const
 	return m_path;
 }
 
-const Json::Value &Request::headers() const
+const json &Request::headers() const
 {
 	return m_headers;
 }
@@ -111,12 +102,12 @@ const std::string &Request::body() const
 
 std::string Request::basePath() const
 {
-	return m_headers.get("PATTERN", std::string()).asString();
+    return m_headers.value("PATTERN", std::string());
 }
 
 std::string Request::methodString() const
 {
-	return m_headers.get("METHOD", std::string()).asString();
+    return m_headers.value("METHOD", std::string());
 }
 
 http::Method Request::method() const

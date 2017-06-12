@@ -32,10 +32,8 @@ target_link_libraries(mcpp ${ZMQ_LIBRARIES})
 target_link_libraries(mcpp_static ${ZMQ_LIBRARIES})
 include_directories(${ZMQ_INCLUDE_DIRS})
 
-pkg_check_modules(JSONCPP jsoncpp REQUIRED)
-target_link_libraries(mcpp ${JSONCPP_LIBRARIES})
-target_link_libraries(mcpp_static ${JSONCPP_LIBRARIES})
-include_directories(${JSONCPP_INCLUDE_DIRS})
+target_link_libraries(mcpp nlohmann_json)
+target_link_libraries(mcpp_static nlohmann_json)
 
 # Generate pc file
 set(PKG_CONFIG_REQUIRES jsoncpp libzmq)
@@ -69,3 +67,6 @@ install(FILES "${CMAKE_BINARY_DIR}/mcpp.pc"
 if(MCPP_BUILD_EXAMPLES)
     add_subdirectory(examples)
 endif()
+
+set(BuildTests OFF CACHE BOOL "Build the unit tests")
+add_subdirectory(external/json)

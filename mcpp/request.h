@@ -1,11 +1,11 @@
 #ifndef MCPP_REQUEST_H
 #define MCPP_REQUEST_H
 
+#include "json.h"
 #include <map>
-#include <json/json.h>
 
-#include <mcpp/query.h>
 #include <mcpp/http.h>
+#include <mcpp/query.h>
 
 namespace zmq {
 class message_t;
@@ -76,7 +76,7 @@ class Request
 		 * @brief Get request headers.
 		 * @return Request headers.
 		 */
-		const Json::Value& headers() const;
+        const json& headers() const;
 
 		/**
 		 * @brief Get request body.
@@ -130,8 +130,8 @@ class Request
 
 		std::string m_sender;
 		unsigned m_connectionId;
-		Json::Value m_headers;
-		Json::Value m_jsonBody;
+        json m_headers;
+        json m_jsonBody;
 		std::string m_body;
 
 		std::string m_path;

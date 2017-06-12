@@ -1,12 +1,15 @@
 #ifndef MCPP_DISPATCHER_H
 #define MCPP_DISPATCHER_H
 
-#include <string>
 #include <functional>
+#include <regex>
+#include <string>
 
 #include <mcpp/request.h>
 
 namespace mcpp {
+
+class Connection;
 
 /**
  * @brief Request dispatcher.
@@ -16,96 +19,23 @@ namespace mcpp {
 class Dispatcher
 {
 	public:
-		Dispatcher();
+        Dispatcher(Connection &connection);
 		~Dispatcher();
 
-		/**
-		 * @brief Function to handle requests with 0 parameters.
-		 */
-		typedef std::function<void(const Request &request)> Handle0;
+        typedef std::vector<std::string> Arguments;
+        typedef std::function<void(Connection &connection, const Request &request, std::smatch match)> Handler;
 
 		/**
-		 * @brief Function to handle requests with 1 parameter.
-		 */
-		typedef std::function<void(const Request &request, std::string)> Handle1;
-
-		/**
-		 * @brief Function to handle requests with 2 parameters.
-		 */
-		typedef std::function<void(const Request &request, std::string, std::string)> Handle2;
-
-		/**
-		 * @brief Function to handle requests with 3 parameters.
-		 */
-		typedef std::function<void(const Request &request, std::string, std::string, std::string)> Handle3;
-
-		/**
-		 * @brief Function to handle requests with 4 parameters.
-		 */
-		typedef std::function<void(const Request &request, std::string, std::string, std::string, std::string)> Handle4;
-
-		/**
-		 * @brief Assign a handle.
+         * @brief Assign a handler.
 		 *
 		 * Example
 		 *
-		 * dispatcher.assign("/items/?", handle);
-		 *
-		 * @note The number of captures in the regex should be greater or equal to
-		 * the number of parameters in the handle.
+         * dispatcher.assign("/items/?", handler);
 		 *
 		 * @param regex Regex to match.
-		 * @param handle Handle to be called.
+         * @param handle Handler to be called.
 		 */
-		void assign(std::string regex, Handle0 handle);
-
-		/**
-		 * @brief Assign a handle.
-		 *
-		 * Example
-		 *
-		 * dispatcher.assign("/([0-9]{4})/?", handle);
-		 *
-		 * @note The number of captures in the regex should be greater or equal to
-		 * the number of parameters in the handle.
-		 *
-		 * @param regex Regex to match.
-		 * @param handle Handle to be called.
-		 */
-		void assign(std::string regex, Handle1 handle);
-
-		/**
-		 * @brief Assign a handle.
-		 *
-		 * @note The number of captures in the regex should be greater or equal to
-		 * the number of parameters in the handle.
-		 *
-		 * @param regex Regex to match.
-		 * @param handle Handle to be called.
-		 */
-		void assign(std::string regex, Handle2 handle);
-
-		/**
-		 * @brief Assign a handle.
-		 *
-		 * @note The number of captures in the regex should be greater or equal to
-		 * the number of parameters in the handle.
-		 *
-		 * @param regex Regex to match.
-		 * @param handle Handle to be called.
-		 */
-		void assign(std::string regex, Handle3 handle);
-
-		/**
-		 * @brief Assign a handle.
-		 *
-		 * @note The number of captures in the regex should be greater or equal to
-		 * the number of parameters in the handle.
-		 *
-		 * @param regex Regex to match.
-		 * @param handle Handle to be called.
-		 */
-		void assign(std::string regex, Handle4 handle);
+        void assign(std::string regex, Handler handler);
 
 		/**
 		 * @brief Dispatch a request.

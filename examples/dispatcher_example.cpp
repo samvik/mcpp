@@ -1,52 +1,59 @@
+#include <functional>
 #include <iostream>
 #include <sstream>
-#include <functional>
 
 #include <mcpp/connection.h>
 #include <mcpp/dispatcher.h>
 
 using namespace std::placeholders;
 
-void handler1(mcpp::Connection &connection, const mcpp::Request &req) {
-	std::cout << "Got a " << req.methodString() << " request for " << req.path() << std::endl;
+void handler1(mcpp::Connection &connection, const mcpp::Request &req,
+              const std::smatch &match)
+{
+    std::cout << "Got a " << req.methodString() << " request for " << req.path()
+              << std::endl;
 
-	std::ostringstream stream;
-	stream << "Hello cruel world!";
-	connection.replyHttp(req, stream.str());
+    std::ostringstream stream;
+    stream << "Hello cruel world!";
+    connection.replyHttp(req, stream.str());
 }
 
-void handler2(mcpp::Connection &connection, const mcpp::Request &req, std::string id) {
-	std::cout << "Got a " << req.methodString() << " request for " << req.path() << " with id " << id << std::endl;
+void handler2(mcpp::Connection &connection, const mcpp::Request &req,
+              const std::smatch &match)
+{
+    std::string id = match[0].str();
+    std::cout << "Got a " << req.methodString() << " request for " << req.path()
+              << " with id " << id << std::endl;
 
-	std::ostringstream stream;
-	stream << "The id is: " << id;
-	connection.replyHttp(req, stream.str());
+    std::ostringstream stream;
+    stream << "The id is: " << id;
+    connection.replyHttp(req, stream.str());
 }
 
-int main(int, char **) {
+int main(int, char **)
+{
 
-	mcpp::Connection connection("tcp://127.0.0.1:9999", "tcp://127.0.0.1:9998");
+    mcpp::Connection connection("tcp://127.0.0.1:9999", "tcp://127.0.0.1:9998");
 
-	mcpp::Dispatcher dispatcher;
+    mcpp::Dispatcher dispatcher(connection);
 
-	// Bind paths to handlers.
-	auto f1 = std::bind(handler1, std::ref(connection), _1);
-	dispatcher.assign("/api/?", static_cast<mcpp::Dispatcher::Handle0>(f1));
+    // Bind paths to handlers.
+    dispatcher.assign("/api/?", &handler1);
+    dispatcher.assign("/api/([^/]+)/?", &handler2);
 
-	auto f2 = std::bind(handler2, std::ref(connection), _1, _2);
-	dispatcher.assign("/api/([^/]+)/?", static_cast<mcpp::Dispatcher::Handle1>(f2));
+    std::cout << "Waiting for requests..." << std::endl;
+    for(;;)
+    {
+        // Wait for a request.
+        mcpp::Request req = connection.receive();
 
-	std::cout << "Waiting for requests..." << std::endl;
-	for(;;) {
-		// Wait for a request.
-		mcpp::Request req = connection.receive();
-
-		if(!req.isDisconnect()) {
-			// Dispatch the request.
-			if(!dispatcher.dispatch(req)) {
-				connection.replyHttp(req, mcpp::http::StatusCode::NOT_FOUND);
-			}
-		}
-	}
-	
+        if(!req.isDisconnect())
+        {
+            // Dispatch the request.
+            if(!dispatcher.dispatch(req))
+            {
+                connection.replyHttp(req, mcpp::http::StatusCode::NOT_FOUND);
+            }
+        }
+    }
 }
