@@ -1,11 +1,13 @@
 #ifndef MCPP_UTILITY_H
 #define MCPP_UTILITY_H
 
-#include <string>
 #include <mcpp/query.h>
+#include <string>
 
-namespace mcpp {
-namespace utility {
+namespace mcpp
+{
+namespace utility
+{
 
 /**
  * @brief Decode an url.
@@ -13,7 +15,7 @@ namespace utility {
  * @param out Decoded url.
  * @return True if successfull, false otherwise.
  */
-bool decodeUrl(const std::string& in, std::string& out);
+bool decodeUrl(const std::string &in, std::string &out);
 
 /**
  * @brief Read a netstring from given stream.
@@ -28,7 +30,6 @@ std::string readNetString(std::istringstream &stream);
  * @param parameters Object to store the parsed queries in.
  */
 void parseQuery(const std::string &query, Query &parameters);
-
 }
 } // namespace mcpp
 

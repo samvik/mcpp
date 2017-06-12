@@ -7,7 +7,8 @@
 
 #include <mcpp/request.h>
 
-namespace mcpp {
+namespace mcpp
+{
 
 class Connection;
 
@@ -18,37 +19,40 @@ class Connection;
  */
 class Dispatcher
 {
-	public:
-        Dispatcher(Connection &connection);
-		~Dispatcher();
+public:
+    Dispatcher(Connection &connection);
+    ~Dispatcher();
 
-        typedef std::vector<std::string> Arguments;
-        typedef std::function<void(Connection &connection, const Request &request, std::smatch match)> Handler;
+    typedef std::vector<std::string> Arguments;
+    typedef std::function<void(Connection &connection, const Request &request,
+                               std::smatch match)>
+        Handler;
 
-		/**
-         * @brief Assign a handler.
-		 *
-		 * Example
-		 *
-         * dispatcher.assign("/items/?", handler);
-		 *
-		 * @param regex Regex to match.
-         * @param handle Handler to be called.
-		 */
-        void assign(std::string regex, Handler handler);
+    /**
+     * @brief Assign a handler.
+     *
+     * Example
+     *
+     * dispatcher.assign("/items/?", handler);
+     *
+     * @param regex Regex to match.
+     * @param handle Handler to be called.
+     */
+    void assign(std::string regex, Handler handler);
 
-		/**
-		 * @brief Dispatch a request.
-		 *
-		 * This will call the first matching handle assigend.
-		 *
-		 * @param request Request to dispatch.
-		 * @return True if request was dispatched, false otherwise.
-		 */
-		bool dispatch(const Request &request);
-	private:
-		struct Impl;
-		Impl *m_impl;
+    /**
+     * @brief Dispatch a request.
+     *
+     * This will call the first matching handle assigend.
+     *
+     * @param request Request to dispatch.
+     * @return True if request was dispatched, false otherwise.
+     */
+    bool dispatch(const Request &request);
+
+private:
+    struct Impl;
+    Impl *m_impl;
 };
 
 } // namespace mcpp

@@ -4,100 +4,105 @@
 #include <sstream>
 #include <zmq.hpp>
 
-namespace mcpp {
+namespace mcpp
+{
 
 Request::Request() : m_valid(false)
 {
-
 }
 
-Request::Request(const zmq::message_t& message) : m_valid(false)
+Request::Request(const zmq::message_t &message) : m_valid(false)
 {
-	std::string in(static_cast<const char*>(message.data()), message.size());
-	std::istringstream stream(in);
+    std::string in(static_cast<const char *>(message.data()), message.size());
+    std::istringstream stream(in);
 
-	std::string path;
-	std::string headers;
+    std::string path;
+    std::string headers;
 
-	// Decode message
-	stream >> m_sender >> m_connectionId;
-	stream >> path;
-	headers = utility::readNetString(stream);
-	m_body = utility::readNetString(stream);
+    // Decode message
+    stream >> m_sender >> m_connectionId;
+    stream >> path;
+    headers = utility::readNetString(stream);
+    m_body = utility::readNetString(stream);
 
-	// Decode path
-	if(!utility::decodeUrl(path, m_path)) {
-		// TODO: Throw exception
-		m_path = path;
-	}
+    // Decode path
+    if(!utility::decodeUrl(path, m_path))
+    {
+        // TODO: Throw exception
+        m_path = path;
+    }
 
-	// Parse http header
+    // Parse http header
     m_headers = json::parse(headers);
 
-	// Parse json body
-    if(m_headers.count("METHOD") && m_headers["METHOD"] == "JSON") {
+    // Parse json body
+    if(m_headers.count("METHOD") && m_headers["METHOD"] == "JSON")
+    {
         m_jsonBody = json::parse(m_body);
-	}
+    }
 
-	// Parse query parameters
+    // Parse query parameters
     std::string query = m_headers.value("QUERY", std::string());
-	if(!query.empty()) {
-		std::string decodedQuery;
-		if(utility::decodeUrl(query, decodedQuery)) {
-			utility::parseQuery(decodedQuery, m_query);
-		}
-		else {
-			// TODO: Throw exception
-		}
-	}
+    if(!query.empty())
+    {
+        std::string decodedQuery;
+        if(utility::decodeUrl(query, decodedQuery))
+        {
+            utility::parseQuery(decodedQuery, m_query);
+        }
+        else
+        {
+            // TODO: Throw exception
+        }
+    }
 
-	m_valid = true;
+    m_valid = true;
 }
 
 Request::~Request()
 {
-
 }
 
 bool Request::isValid() const
 {
-	return m_valid;
+    return m_valid;
 }
 
 bool Request::isDisconnect() const
 {
-	bool result = false;
+    bool result = false;
 
-    if(m_jsonBody.count("type") && m_jsonBody["type"] == "disconnect") {
-		result = true;
-	}
+    if(m_jsonBody.count("type") && m_jsonBody["type"] == "disconnect")
+    {
+        result = true;
+    }
 
-	return result;
+    return result;
 }
 
 const std::string &Request::sender() const
 {
-	return m_sender;
+    return m_sender;
 }
 
 unsigned Request::connectionId() const
 {
-	return m_connectionId;
+    return m_connectionId;
 }
 
 const std::string &Request::path() const
 {
-	return m_path;
+    return m_path;
 }
 
 const json &Request::headers() const
 {
-	return m_headers;
+    return m_headers;
 }
 
 const std::string &Request::body() const
 {
-	return m_body;
+    return m_body;
 }
 
 std::string Request::basePath() const
@@ -112,13 +117,12 @@ std::string Request::methodString() const
 
 http::Method Request::method() const
 {
-	return http::getMethod(methodString());
+    return http::getMethod(methodString());
 }
 
-const Query& Request::query() const
+const Query &Request::query() const
 {
-	return m_query;
+    return m_query;
 }
 
 } // namespace mcpp
-

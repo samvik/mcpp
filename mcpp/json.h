@@ -3,9 +3,9 @@
 
 #include <json.hpp>
 
-namespace mcpp {
+namespace mcpp
+{
 using json = nlohmann::json;
 }
-
 
 #endif // JSON_H
